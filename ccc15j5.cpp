@@ -1,14 +1,23 @@
 #include <iostream>
 
-int pie, people;
+int pies, people;
+int piesToPeople[251][251][251]; // this is just stupid
 
-int piepeople[250][250];
+int recursion(int min, int pies, int people) {
+	if (people == 1) return 1;
+	if (piesToPeople[pies][people][min] != 0) return piesToPeople[pies][people][min];
+
+	for (int i = min; i <= pies / people; i++) {
+		piesToPeople[pies][people][min] += recursion(i, pies-i, people-1);
+	}
+	return piesToPeople[pies][people][min];
+}
+
 int main() {
+	std::cin.sync_with_stdio(false);
 	std::cin.tie(0);
-	std::cin.sync_with_stdio(0);
-	std::cin >> pie >> people;
-	
-	// recalculate max 24/7 with remaining pie and remaining people
-	int max = pie / people;
-	// my brain is too tired and too small
+
+	std::cin >> pies >> people;
+	std::cout << recursion(1, pies, people) << "\n";
+	return 0;
 }
