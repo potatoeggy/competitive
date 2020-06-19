@@ -1,29 +1,25 @@
 #include <iostream>
+#include <set>
 
-int times, plane, c = 0;
-bool gates[100001]; // this is probably the data structure that needs to change
-
-int main() {
+int gates, planes, counter;
+std::set<int> available;
+int main() { // this is more or less just the editorial
 	std::cin.sync_with_stdio(0);
 	std::cin.tie(0);
+	counter = 0;
 
-	std::cin >> times;
-	std::cin >> times;
+	std::cin >> gates;
+	for (int i = 1; i <= gates; i++) available.insert(-i);
 
-	for (int i = 0; i < times; i++) {
-		std::cin >> plane;
-		bool failed = true;
-		for (int j = plane; j > 0; j--) {
-			if (!gates[j]) {
-				gates[j] = true;
-				failed = false;
-				c++;
-				break;
-			}
-		}
-		if (failed) {
-			break;
-		}
+	std::cin >> planes;
+	for (int i = 0; i < planes; i++) {
+		int request;
+		std::cin >> request;
+		if (available.lower_bound(-request) == available.end()) break; // it's negative because for whatever inane reason lower_bound goes *up* if element not found
+		available.erase(available.lower_bound(-request));
+		counter++;
 	}
-	std::cout << c << "\n";
+
+	std::cout << counter << '\n';
+	return 0;
 }
