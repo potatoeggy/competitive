@@ -1,29 +1,30 @@
 #include <iostream>
 #include <algorithm>
 #include <string.h>
-using namespace std;
+
+std::string string;
 
 int main() {
-	cin.sync_with_stdio(0);
-	cin.tie(0);
-	string input;
-	getline(cin, input);
-	char array[input.length()];
-	strncpy(array, input.c_str(), sizeof(array));
+	std::cin.sync_with_stdio(0);
+	std::cin.tie(0);
+	std::getline(std::cin, string);
 
-	int upper = 0;
-	int lower = 0;
-	for (int i = 0; i < sizeof(array); i++) {
-		if (array[i] == toupper(array[i])) {
+	int upper, lower;
+	upper = lower = 0;
+	for (int i = 0; i < string.length(); i++) {
+		if (string.at(i) == std::toupper(string.at(i))) {
 			upper++;
-		} else {
+		}
+		if (string.at(i) == std::tolower(string.at(i))) {
 			lower++;
 		}
 	}
 	if (upper > lower) {
-		transform(input.begin(), input.end(), input.begin(), ::toupper);
+		std::transform(string.begin(), string.end(), string.begin(), ::toupper);
 	} else if (lower > upper) {
-		transform(input.begin(), input.end(), input.begin(), ::tolower);
+		std::transform(string.begin(), string.end(), string.begin(), ::tolower);
 	}
-	cout << input; // how to cpp :(
+
+	std::cout << string << '\n';
+	return 0;
 }
