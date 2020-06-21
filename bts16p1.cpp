@@ -12,10 +12,9 @@ int main() {
 	int upper, lower;
 	upper = lower = 0;
 	for (int i = 0; i < string.length(); i++) {
-		if (string.at(i) == std::toupper(string.at(i))) {
+		if (std::isupper(string[i])) {
 			upper++;
-		}
-		if (string.at(i) == std::tolower(string.at(i))) {
+		} else if (std::islower(string[i])) {
 			lower++;
 		}
 	}
