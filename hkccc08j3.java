@@ -48,17 +48,15 @@ public class hkccc08j3 {
 				biggest = queries[i];
 				biggestNum = numbers[i];
 				biggestInd = i;
+			} else if (queries[i] == biggest) {
+				if (biggestNum > numbers[i]) {
+					biggest = queries[i];
+					biggestNum = numbers[i];
+					biggestInd = i;
+				}
 			}
 		}
 
-		for (int i = 0; i < names.length; i++) {
-			if (queries[i] == biggest && numbers[i] > biggestNum) {
-				biggest = queries[i];
-				biggestNum = numbers[i];
-				biggestInd = i;
-			}
-		}
-		// why this no work
 		System.out.println(names[biggestInd]);
 	}
 }
