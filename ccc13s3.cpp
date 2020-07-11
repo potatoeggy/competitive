@@ -6,7 +6,7 @@ int favourite, gamesPlayed;
 int scores[5][5];
 std::set<std::vector<int>> finalScoreStorage;
 
-int recursion(int oldScores[5][5]) { // this seems dumb
+int recursion(int oldScores[5][5]) { // consider using vectors over arrays
 	int localScores[5][5];
 	int finalScores[5] = {0, 0, 0, 0, 0};
 	int tally = 0;
@@ -37,10 +37,9 @@ int recursion(int oldScores[5][5]) { // this seems dumb
 
 	if (complete) {
 		if (finalScores[favourite] == std::max(finalScores[1], std::max(finalScores[2], std::max(finalScores[3], finalScores[4])))) {
-			if (finalScoreStorage.find(std::vector<int>{finalScores[1], finalScores[2], finalScores[3], finalScores[4]}) == finalScoreStorage.end()) {
-				finalScoreStorage.insert(std::vector<int>{finalScores[1], finalScores[2], finalScores[3], finalScores[4]});
-				tally++;
-			}
+			int size = finalScoreStorage.size();
+			finalScoreStorage.insert({finalScores[1], finalScores[2], finalScores[3], finalScores[4]});
+			if (size != finalScoreStorage.size()) tally++;
 		}
 	}
 	return tally;
