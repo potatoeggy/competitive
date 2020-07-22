@@ -9,4 +9,5 @@ int main() {
 		}
 	}
 	std::cout << counter << '\n';
+	return 0;
 }
