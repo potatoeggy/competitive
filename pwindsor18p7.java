@@ -11,7 +11,7 @@ public class pwindsor18p7 {
 		for (int i = 0; i < array.length; i++) {
 			array[i] = br.readLine();
 		}
-		Arrays.sort(array);
+		Arrays.sort(array); // problem here is that "2" is sorted before "299" 
 		for (int i = array.length-1; i >= 0; i--) {
 			System.out.print(array[i]);
 		}
