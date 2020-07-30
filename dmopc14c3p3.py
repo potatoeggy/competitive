@@ -14,9 +14,9 @@ vets.sort(key=lambda tup: tup[1])
 for _ in range(int(input())):
 	base, tolerance = tuple(map(int, sys.stdin.readline().split()))
 	found = False
-	for i in range(len(vets)):
-		if base <= vets[i][1] <= base + tolerance:
-			print(vets[i][0])
+	for pair in vets:
+		if base <= pair[1] <= base + tolerance:
+			print(pair[0])
 			found = True
 			break
 	if not found: print("No suitable teacher!")
