@@ -1,5 +1,3 @@
-from queue import Queue
-
 current_number = int(input())
 late_students = 0
 students_in_line = 0
