@@ -1,0 +1,1 @@
+print("YES" if "CCC" not in input() else "NO")
