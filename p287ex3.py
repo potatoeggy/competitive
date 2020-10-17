@@ -1,0 +1,1 @@
+print(format(min(map(float, (input() for i in range(int(input()))))), ".2f"))
