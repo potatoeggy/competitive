@@ -16,28 +16,27 @@ public class dmopc17c5p3 {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Long[] array = new Long[Integer.parseInt(nextLong().toString())];
-
-		for (int i = 0; i < array.length; i++) {
-			array[i] = nextLong();
+		long times = nextLong();
+		long factor = nextLong();
+		for (int i = 1; i < times; i++) {
+			factor = gcf(factor, nextLong());
 		}
 
-		long factor = array[0];
-
-		for (int i = 1; i < array.length; i++) {
-			factor = gcf(factor, array[i]);
+		for (long i = 2; i * i <= factor;) {
+			if (factor % i != 0) i++;
+			else factor /= i;
 		}
 
-		for (long i = factor; i >= 2; i--) {
-			if (factor % i == 0 && BigInteger.valueOf(i).isProbablePrime(1)) { // why is this broken
-				System.out.println(i);
-				break;
-			}
-		}
+		System.out.println(factor != 1 ? factor : "DNE");
 	}
 
-	static long gcf(long x, long y) {
-		if (y == 0) return x;
-		return gcf(y, x % y);
+	static long gcf(long a, long b) {
+		while (b != 0) {
+			long tmp = a;
+			a = b;
+			b = tmp;
+			b %= a;
+		}
+		return a;
 	}
 }
