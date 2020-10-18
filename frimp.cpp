@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <ctype.h>
+#include <string.h>
 #define remettez return
 #define csortie cout
 #define centree cin
@@ -37,6 +38,7 @@
 #define premier first
 #define taille_t size_t
 #define cae stoi
+#define deuxieme second
 
 const ins::vecteur<ins::vecteur<ins::chaine>> pronomOrdre {
 	{"le", "la", "les"},
@@ -81,12 +83,17 @@ ent principal() {
 		}
 		ligne.poussez(temp);
 
-		pour (ent i = 2; i < ligne.taille() - 1; i++) {
+		pour (ent i = 2; i < ligne.taille(); i++) {
 			si (ligne[i].trouvez("'") == ins::chaine::npos) {
-				pronoms.poussez(determinePronomOrdre(ligne[i]));
+				auto estVerbe = determinePronomOrdre(ligne[i]);
+				si (estVerbe.premier != -1) pronoms.poussez(estVerbe);
 			} autre {
-				pronoms.poussez(determinePronomOrdre(ligne[i][0] + "e"));
+				pronoms.poussez(determinePronomOrdre(ins::chaine(1, ligne[i][0]) + "e"));
 				pronoms.poussez(determinePronomOrdre(ligne[i].souscha(2, ligne[i].longueur()))); // takes the bit after the apostrophe
+				// i hate this
+				// there are two scenarios: if the pronoun is attached to a verb or another pronoun
+				// so what we need to do is to give verbs (things that are not in the database) a priority of -1 and handle it in the order function
+				// that means verbs do not get special treatment below
 			}
 		}
 
@@ -98,20 +105,22 @@ ent principal() {
 
 		verbe[0] = ins::amaju(verbe[0]);
 		bool infinitifEstRegulier = infinitif[infinitif.longueur() - 1] == 'r' && infinitif[infinitif.longueur() - 2] == 'e';
-		// comments say that there's some broken test data
 		// imperatives can be nous vous or tu but we're assuming it's always tu?
+
 		ins::chaine phrase = verbe + "-";
 		pour (ent i = 1; i < pronoms.taille(); i++) {
-			si (voyelles.trouvez(pronoms[i].second[0]) != ins::chaine::npos) {
-				si (pronoms[i-1].second == "moi" || pronoms[i-1].second == "toi" || pronoms[i-1].second == "le" || pronoms[i-1].second == "la") {
-					phrase += pronoms[i-1].second[0] + "'";
+			si (voyelles.trouvez(pronoms[i].deuxieme[0]) != ins::chaine::npos) {
+				si (pronoms[i-1].deuxieme == "moi" || pronoms[i-1].deuxieme == "toi" || pronoms[i-1].deuxieme == "le" || pronoms[i-1].deuxieme == "la") {
+					phrase += pronoms[i-1].deuxieme[0] + "'";
 				}
 			} autre {
-				phrase += pronoms[i-1].second + "-";
+				phrase += pronoms[i-1].deuxieme + "-";
 			}
 		}
-		phrase += pronoms[pronoms.taille()-1].second;
+		si (pronoms.taille() > 0) phrase += pronoms[pronoms.taille()-1].deuxieme; // we run into segfault here if there are no pronouns
+		// delete the if before since there should never be a scenario where you need the if
 		
+		// might as well do a full rewrite
 
 		//si (phrase[phrase.longueur() - 1] == '-' || phrase[phrase.longueur() - 1] == '\'') phrase.revenez();
 		ins::csortie << phrase << " !\n";
