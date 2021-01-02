@@ -1,68 +1,56 @@
 #include <iostream>
 #include <vector>
-#include <set>
-// sample cases are find but the actual thing fails and idk why oh well
-int favourite, gamesPlayed;
-int scores[5][5];
-std::set<std::vector<int>> finalScoreStorage;
 
-int recursion(int oldScores[5][5]) { // consider using vectors over arrays
-	int localScores[5][5];
-	int finalScores[5] = {0, 0, 0, 0, 0};
-	int tally = 0;
-	for (int i = 0; i <= 4; i++) {
-		for (int j = 0; j <= 4; j++) {
-			localScores[i][j] = oldScores[i][j];
-			finalScores[i] += localScores[i][j];
-		}
-	}
+int team;
 
-	bool complete = true;
-	for (int i = 1; i <= 4; i++) {
-		for (int j = i + 1; j <= 4; j++) {
-			if (localScores[i][j] == 0 && localScores[j][i] == 0) { // we are duplicating matches
-				complete = false;
-				localScores[i][j] += 3;
-				tally += recursion(localScores);
-				localScores[i][j] -= 3;
-				localScores[j][i] += 3;
-				tally += recursion(localScores);
-				localScores[i][j] += 1;
-				localScores[j][i] -= 2;
-				tally += recursion(localScores);
+int score(std::vector<std::vector<int>> games) {
+	// probably don't need to recalculate but instead use list of games needed with list of current scores
+	int points[5];
+	for (int i = 0; i < 5; i++) points[i] = 0;
+	int wins = 0;
+	for (int i = 4; i >= 1; i--) {
+		for (int j = 4; j > i; j--) {
+			if (games[i][j] == -1) {
+				games[i][j] = 3;
+				wins += score(games);
+				games[i][j] = 1;
+				wins += score(games);
+				games[i][j] = 0;
+				wins += score(games);
+				return wins;
+			} else {
+				if (games[i][j] == 3) points[i] += 3;
+				else if (games[i][j] == 1) {
+					points[i]++;
+					points[j]++;
+				} else {
+					points[j] += 3;
+				}
 			}
 		}
 	}
 
-
-	if (complete) {
-		if (finalScores[favourite] == std::max(finalScores[1], std::max(finalScores[2], std::max(finalScores[3], finalScores[4])))) {
-			int size = finalScoreStorage.size();
-			finalScoreStorage.insert({finalScores[1], finalScores[2], finalScores[3], finalScores[4]});
-			if (size != finalScoreStorage.size()) tally++;
-		}
+	for (int i = 1; i < 5; i++) {
+		if (i != team && points[i] >= points[team]) return 0;
 	}
-	return tally;
+	return 1;
 }
 
 int main() {
-	std::cin.sync_with_stdio(0);
-	std::cin.tie(0);
+	int gamesPlayed; std::cin >> team >> gamesPlayed;
+	std::vector<std::vector<int>> games(5, std::vector<int>(5, -1));
 
-	std::cin >> favourite >> gamesPlayed;
-	for (int i = 0, t1, t2, s1, s2; i < gamesPlayed; i++) {
-		std::cin >> t1 >> t2 >> s1 >> s2;
-		if (s1 > s2) {
-			scores[t1][t2] += 3;
-		} else if (s1 < s2) {
-			scores[t2][t1] += 3;
+	for (int i = 0; i < gamesPlayed; i++) {
+		int team1, team2, score1, score2; std::cin >> team1 >> team2 >> score1 >> score2;
+		if (score1 > score2) {
+			games[team1][team2] = 3;
+		} else if (score1 == score2) {
+			games[team1][team2] = 1;
 		} else {
-			scores[t1][t2] += 1;
-			scores[t2][t1] += 1;
+			games[team1][team2] = 0;
 		}
 	}
 
-	std::cout << recursion(scores) << '\n';
-
+	std::cout << score(games) << '\n';
 	return 0;
 }
