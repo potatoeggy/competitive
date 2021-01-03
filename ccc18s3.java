@@ -47,13 +47,13 @@ public class ccc18s3 {
 				} else if (inputGrid[i][j] == 'C') {
 					for (int k = -1; k <= 1; k += 2) {
 						for (int big = i; inputGrid[big][j] != 'W'; big += k) {
-							if (inputGrid[big][j] == '.') {
+							if (inputGrid[big][j] == '.' || inputGrid[big][j] == 'S') {
 								grid[big][j] = 'W';
 							}
 						}
 
 						for (int big = j; inputGrid[i][big] != 'W'; big += k) {
-							if (inputGrid[i][big] == '.') {
+							if (inputGrid[i][big] == '.' || inputGrid[i][big] == 'S') {
 								grid[i][big] = 'W';
 							}
 						}
@@ -70,9 +70,11 @@ public class ccc18s3 {
 		Queue<Integer> qx = new LinkedList<Integer>();
 		Queue<Integer> qy = new LinkedList<Integer>();
 
-		visited[startx][starty] = true;
-		qx.add(startx);
-		qy.add(starty);
+		if (grid[startx][starty] != 'W') {
+			visited[startx][starty] = true;
+			qx.add(startx);
+			qy.add(starty);
+		}
 
 		int modx = 0;
 		int mody = 0;
